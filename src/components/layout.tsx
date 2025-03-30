@@ -54,7 +54,7 @@ export function Layout({
         {children}
       </main>
       <footer className="border-t py-4 text-center text-sm text-muted-foreground">
-        <p>© {new Date().getFullYear()} تطبيق المذكرات</p>
+        <p>© {new Date().getFullYear()} تطبيق المذكرات | تطوير م/مهيب الجمالي</p>
       </footer>
     </div>
   );
