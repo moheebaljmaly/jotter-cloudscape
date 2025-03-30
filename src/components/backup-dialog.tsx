@@ -2,11 +2,13 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Database, UploadCloud, Wifi, WifiOff } from "lucide-react";
-import { checkOnlineStatus, createBackup, importBackup, getOfflineMode, toggleOfflineMode } from "@/lib/backup-service";
+import { Database, Download, UploadCloud, Wifi, WifiOff } from "lucide-react";
+import { checkOnlineStatus, createLocalBackup, createCloudBackup, importBackup, getOfflineMode, toggleOfflineMode } from "@/lib/backup-service";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function BackupDialog() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -39,27 +41,26 @@ export function BackupDialog() {
     });
   };
 
-  // دالة إنشاء نسخة احتياطية
-  const handleCreateBackup = async () => {
+  // دالة إنشاء نسخة احتياطية محلية
+  const handleCreateLocalBackup = () => {
+    createLocalBackup();
+    setIsOpen(false);
+  };
+
+  // دالة إنشاء نسخة احتياطية سحابية
+  const handleCreateCloudBackup = async () => {
     // إذا كان وضع عدم الاتصال مفعل، نطلب من المستخدم تعطيله أولاً
     if (offlineMode) {
       toast('الرجاء تعطيل وضع عدم الاتصال', {
-        description: 'يجب أن يكون وضع عدم الاتصال معطلاً لعمل نسخة احتياطية',
+        description: 'يجب أن يكون وضع عدم الاتصال معطلاً لعمل نسخة احتياطية سحابية',
       });
       return;
     }
     
-    const online = await checkOnlineStatus();
-    
-    if (!online) {
-      toast('لا يوجد اتصال بالإنترنت', {
-        description: 'يرجى الاتصال بالإنترنت أولاً لعمل نسخة احتياطية',
-      });
-      return;
+    const success = await createCloudBackup();
+    if (success) {
+      setIsOpen(false);
     }
-    
-    createBackup();
-    setIsOpen(false);
   };
 
   // دالة فتح نافذة اختيار الملفات
@@ -135,16 +136,45 @@ export function BackupDialog() {
             )}
           </div>
 
+          <Tabs defaultValue="local" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="local">نسخة محلية</TabsTrigger>
+              <TabsTrigger value="cloud">نسخة سحابية</TabsTrigger>
+            </TabsList>
+            <TabsContent value="local" className="mt-3">
+              <div className="flex flex-col space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  النسخة المحلية تحفظ الملاحظات على جهازك ولا تحتاج اتصال بالإنترنت
+                </p>
+                <Button 
+                  onClick={handleCreateLocalBackup} 
+                  className="w-full"
+                >
+                  <Download className="ml-2 h-4 w-4" />
+                  إنشاء نسخة احتياطية محلية
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="cloud" className="mt-3">
+              <div className="flex flex-col space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  النسخة السحابية تحفظ الملاحظات في السحابة الإلكترونية وتحتاج اتصال بالإنترنت
+                </p>
+                <Button 
+                  onClick={handleCreateCloudBackup} 
+                  className="w-full"
+                  disabled={!isOnline || offlineMode}
+                >
+                  <UploadCloud className="ml-2 h-4 w-4" />
+                  إنشاء نسخة احتياطية سحابية
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <Separator className="my-2" />
+
           <div className="flex flex-col space-y-3">
-            <Button 
-              onClick={handleCreateBackup} 
-              className="w-full"
-              disabled={!isOnline || offlineMode}
-            >
-              <UploadCloud className="ml-2 h-4 w-4" />
-              إنشاء نسخة احتياطية
-            </Button>
-            
             <input
               type="file"
               ref={fileInputRef}
