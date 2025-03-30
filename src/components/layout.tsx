@@ -1,8 +1,10 @@
 
+import * as React from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus } from "lucide-react";
+import { BackupDialog } from "@/components/backup-dialog";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -46,6 +48,7 @@ export function Layout({
                 <Plus className="h-5 w-5" />
               </Button>
             )}
+            <BackupDialog />
             <ThemeToggle />
           </div>
         </div>

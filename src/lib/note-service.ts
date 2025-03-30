@@ -1,5 +1,5 @@
 
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 export interface Note {
   id: string;
@@ -19,10 +19,8 @@ export const getNotes = (): Note[] => {
     return JSON.parse(notesJson);
   } catch (error) {
     console.error("Failed to load notes:", error);
-    toast({
-      title: "عفواً، حدث خطأ",
+    toast("عفواً، حدث خطأ", {
       description: "لم نتمكن من تحميل الملاحظات",
-      variant: "destructive",
     });
     return [];
   }
@@ -35,10 +33,8 @@ export const getNote = (id: string): Note | undefined => {
     return notes.find((note) => note.id === id);
   } catch (error) {
     console.error("Failed to get note:", error);
-    toast({
-      title: "عفواً، حدث خطأ",
+    toast("عفواً، حدث خطأ", {
       description: "لم نتمكن من الوصول للملاحظة",
-      variant: "destructive",
     });
     return undefined;
   }
@@ -84,10 +80,8 @@ export const saveNote = (note: Omit<Note, "id" | "createdAt" | "updatedAt"> & { 
     return newNote;
   } catch (error) {
     console.error("Failed to save note:", error);
-    toast({
-      title: "عفواً، حدث خطأ",
+    toast("عفواً، حدث خطأ", {
       description: "لم نتمكن من حفظ الملاحظة",
-      variant: "destructive",
     });
     throw error;
   }
@@ -102,10 +96,8 @@ export const deleteNote = (id: string): boolean => {
     return true;
   } catch (error) {
     console.error("Failed to delete note:", error);
-    toast({
-      title: "عفواً، حدث خطأ",
+    toast("عفواً، حدث خطأ", {
       description: "لم نتمكن من حذف الملاحظة",
-      variant: "destructive",
     });
     return false;
   }
