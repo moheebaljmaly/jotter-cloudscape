@@ -3,19 +3,47 @@
 import { Note, getNotes } from './note-service';
 import { toast } from 'sonner';
 
+// متغير للتحكم في وضع عدم الاتصال (Offline Mode)
+let offlineMode = localStorage.getItem('offline-mode') === 'true';
+
+// دالة للحصول على حالة وضع عدم الاتصال
+export const getOfflineMode = (): boolean => {
+  return offlineMode;
+};
+
+// دالة لتغيير وضع الاتصال
+export const toggleOfflineMode = (): boolean => {
+  offlineMode = !offlineMode;
+  localStorage.setItem('offline-mode', offlineMode.toString());
+  return offlineMode;
+};
+
 // دالة للتحقق من وجود اتصال بالإنترنت
 export const checkOnlineStatus = async (): Promise<boolean> => {
+  // إذا كان وضع عدم الاتصال مفعل، نعتبر أنه لا يوجد اتصال
+  if (offlineMode) {
+    return false;
+  }
+  
   try {
-    // محاولة الاتصال بجوجل للتحقق من وجود انترنت
-    const response = await fetch('https://www.google.com', { 
+    // استخدام تقنية navigator.onLine للتحقق من حالة الاتصال أولاً
+    if (!navigator.onLine) {
+      return false;
+    }
+    
+    // محاولة الوصول إلى ملف صغير للتأكد من الاتصال الفعلي
+    // استخدام Date.now() لتجنب التخزين المؤقت
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 ثواني كمهلة قصوى
+    
+    const response = await fetch(`https://www.cloudflare.com/cdn-cgi/trace?${Date.now()}`, { 
       method: 'HEAD',
       mode: 'no-cors',
       cache: 'no-cache',
-      credentials: 'omit',
-      referrerPolicy: 'no-referrer',
-      // 10 ثواني كمهلة قصوى
-      signal: AbortSignal.timeout(10000)
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     return true;
   } catch (error) {
     console.error('فشل التحقق من الاتصال بالإنترنت:', error);

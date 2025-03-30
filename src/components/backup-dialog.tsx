@@ -3,12 +3,15 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Database, UploadCloud, Wifi, WifiOff } from "lucide-react";
-import { checkOnlineStatus, createBackup, importBackup } from "@/lib/backup-service";
+import { checkOnlineStatus, createBackup, importBackup, getOfflineMode, toggleOfflineMode } from "@/lib/backup-service";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export function BackupDialog() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOnline, setIsOnline] = React.useState(false);
+  const [offlineMode, setOfflineMode] = React.useState(getOfflineMode());
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // التحقق من حالة الاتصال عند فتح الحوار
@@ -24,8 +27,28 @@ export function BackupDialog() {
     setIsOnline(online);
   };
 
+  // دالة تغيير وضع عدم الاتصال
+  const handleToggleOfflineMode = () => {
+    const newMode = toggleOfflineMode();
+    setOfflineMode(newMode);
+    
+    toast(newMode ? 'تم تفعيل وضع عدم الاتصال' : 'تم إلغاء وضع عدم الاتصال', {
+      description: newMode 
+        ? 'لن يتم محاولة الاتصال بالإنترنت إلا عند الحاجة للنسخ الاحتياطي' 
+        : 'سيتم التحقق من الاتصال بالإنترنت عند الحاجة',
+    });
+  };
+
   // دالة إنشاء نسخة احتياطية
   const handleCreateBackup = async () => {
+    // إذا كان وضع عدم الاتصال مفعل، نطلب من المستخدم تعطيله أولاً
+    if (offlineMode) {
+      toast('الرجاء تعطيل وضع عدم الاتصال', {
+        description: 'يجب أن يكون وضع عدم الاتصال معطلاً لعمل نسخة احتياطية',
+      });
+      return;
+    }
+    
     const online = await checkOnlineStatus();
     
     if (!online) {
@@ -69,7 +92,7 @@ export function BackupDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={checkConnectionStatus}>
+        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
           <Database className="h-5 w-5" />
         </Button>
       </DialogTrigger>
@@ -82,6 +105,21 @@ export function BackupDialog() {
         </DialogHeader>
 
         <div className="flex flex-col space-y-4 py-4">
+          {/* خيار وضع عدم الاتصال */}
+          <div className="flex items-center justify-between rounded-lg border p-3">
+            <div className="space-y-0.5">
+              <Label htmlFor="offline-mode">وضع عدم الاتصال</Label>
+              <p className="text-sm text-muted-foreground">
+                تفعيل هذا الخيار يمنع التطبيق من الاتصال بالإنترنت
+              </p>
+            </div>
+            <Switch
+              id="offline-mode"
+              checked={offlineMode}
+              onCheckedChange={handleToggleOfflineMode}
+            />
+          </div>
+
           {/* عرض حالة الاتصال */}
           <div className="flex items-center justify-center gap-2 py-2 px-4 rounded-md bg-muted">
             {isOnline ? (
@@ -101,7 +139,7 @@ export function BackupDialog() {
             <Button 
               onClick={handleCreateBackup} 
               className="w-full"
-              disabled={!isOnline}
+              disabled={!isOnline || offlineMode}
             >
               <UploadCloud className="ml-2 h-4 w-4" />
               إنشاء نسخة احتياطية

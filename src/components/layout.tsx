@@ -3,8 +3,10 @@ import * as React from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, WifiOff } from "lucide-react";
 import { BackupDialog } from "@/components/backup-dialog";
+import { getOfflineMode } from "@/lib/backup-service";
+import { useEffect, useState } from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,6 +22,20 @@ export function Layout({
   showAddButton = false
 }: LayoutProps) {
   const navigate = useNavigate();
+  const [offlineMode, setOfflineMode] = useState(getOfflineMode());
+  
+  // تحديث حالة وضع عدم الاتصال عند التغيير
+  useEffect(() => {
+    const checkOfflineMode = () => {
+      setOfflineMode(getOfflineMode());
+    };
+    
+    // التحقق من حالة وضع عدم الاتصال كل ثانية
+    const interval = setInterval(checkOfflineMode, 1000);
+    
+    // التنظيف عند إزالة المكون
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <div className="min-h-screen flex flex-col" dir="rtl">
@@ -37,6 +53,14 @@ export function Layout({
               </Button>
             )}
             <h1 className="text-xl font-bold">{title}</h1>
+            
+            {/* إظهار علامة وضع عدم الاتصال */}
+            {offlineMode && (
+              <div className="flex items-center gap-1 bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-1 rounded-full text-xs">
+                <WifiOff className="h-3 w-3" />
+                <span>وضع عدم الاتصال</span>
+              </div>
+            )}
           </div>
           <div className="flex gap-2">
             {showAddButton && (
