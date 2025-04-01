@@ -1,210 +1,201 @@
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تطبيق المذكرات</title>
-    <meta name="description" content="تطبيق مذكرات بسيط يتيح للمستخدمين إنشاء وحفظ وتعديل وحذف الملاحظات" />
-    <meta name="author" content="Lovable" />
-
-    <meta property="og:title" content="تطبيق المذكرات" />
-    <meta property="og:description" content="تطبيق مذكرات بسيط وسهل الاستخدام" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-  </head>
-
-  <body>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
     <div class="app">
-      <!-- Header -->
-      <header class="header">
-        <div class="header-container">
-          <div class="header-left">
-            <button id="backButton" class="icon-button hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
-            </button>
-            <h1 id="pageTitle" class="page-title">مذكراتي</h1>
-            <div id="offlineIndicator" class="offline-indicator hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.13 12.85a11.09 11.09 0 0 1 0-1.7"></path><path d="M6.13 17.85a11.09 11.09 0 0 1-5-5"></path><path d="M6.13 6.15a11.09 11.09 0 0 1 5-5"></path><path d="M11.13 1.15a11.09 11.09 0 0 1 1.7 0"></path><path d="M16.13 6.15a11.09 11.09 0 0 1 5 5"></path><path d="M16.13 17.85a11.09 11.09 0 0 1-5 5"></path><path d="M11.13 22.85a11.09 11.09 0 0 1-1.7 0"></path><path d="M7.63 7.65a4 4 0 0 1 8.8 8.8"></path><path d="m2 2 20 20"></path></svg>
-              <span>وضع عدم الاتصال</span>
+        <header class="header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button id="backButton" class="icon-button hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                    <h1 id="pageTitle" class="page-title">مذكراتي</h1>
+                </div>
+                <div class="header-right">
+                    <div id="offlineIndicator" class="offline-indicator hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.88 3.55A13.99 13.99 0 0 1 23 12c0 1.05-.11 2.07-.33 3.06"></path><path d="M8.55 16.88A13.992 13.992 0 0 0 20.94 15m2.3-8.05a18.01 18.01 0 0 0-20.5-1.72M4.34 21.1A18.02 18.02 0 0 0 12 19.99c3.02 0 5.86.75 8.34 2.07M10.3.1a18.01 18.01 0 0 0-7.27 15.07"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        <span>غير متصل</span>
+                    </div>
+                    <button id="addButton" class="icon-button add-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                    </button>
+                    <button id="backupButton" class="icon-button rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10a8 8 0 0 1-16 0"></path><path d="M2 10h16"></path><path d="m8 16 4 4 4-4"></path><path d="M12 12v8"></path></svg>
+                    </button>
+                    <button id="themeToggle" class="icon-button rounded">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6.364 6.364 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                    </button>
+                </div>
             </div>
-          </div>
-          <div class="header-right">
-            <button id="addButton" class="icon-button add-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
-            </button>
-            <button id="backupButton" class="icon-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-            </button>
-            <button id="themeToggle" class="icon-button">
-              <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
-              <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
-            </button>
-          </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Home Page -->
+            <div id="homePage" class="page active">
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="ابحث في الملاحظات...">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                </div>
+
+                <div id="notesList" class="notes-grid"></div>
+
+                <div id="emptyNotesMessage" class="empty-notes-message">
+                    <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    <h2 class="empty-title">لا توجد ملاحظات</h2>
+                    <p class="empty-text">ابدأ بإضافة ملاحظة جديدة</p>
+                    <button id="emptyAddButton" class="button primary">إضافة ملاحظة</button>
+                </div>
+            </div>
+
+            <!-- Edit Page -->
+            <div id="editPage" class="page">
+                <form id="noteForm" class="note-form">
+                    <div class="form-group">
+                        <label for="noteTitle" class="form-label">العنوان</label>
+                        <input type="text" id="noteTitle" class="form-input" placeholder="أدخل عنوان الملاحظة...">
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent" class="form-label">المحتوى</label>
+                        <textarea id="noteContent" class="form-textarea" placeholder="أدخل محتوى الملاحظة..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelButton" class="button outline">إلغاء</button>
+                        <button type="submit" id="saveButton" class="button primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- View Page -->
+            <div id="viewPage" class="page">
+                <div class="view-note-header">
+                    <div class="view-note-actions">
+                        <button id="editNoteButton" class="button outline">
+                            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            تعديل
+                        </button>
+                        <button id="shareNoteButton" class="button outline">
+                            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                            مشاركة
+                        </button>
+                        <button id="deleteNoteButton" class="button outline danger">
+                            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            حذف
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="note-dates">
+                    <span id="createdDate">إنشاء: </span>
+                    <span id="updatedDate">تعديل: </span>
+                </div>
+                
+                <div id="noteContentView" class="note-content-view"></div>
+            </div>
+        </main>
+
+        <!-- Backup Dialog -->
+        <div id="backupDialog" class="dialog">
+            <div class="dialog-overlay"></div>
+            <div class="dialog-content">
+                <div class="dialog-header">
+                    <h2 class="dialog-title">النسخ الاحتياطي والاستعادة</h2>
+                    <p class="dialog-description">قم بعمل نسخة احتياطية من ملاحظاتك أو استعادتها من نسخة سابقة</p>
+                </div>
+                
+                <div class="dialog-body">
+                    <div class="offline-mode-switch">
+                        <div>
+                            <div class="switch-label">وضع عدم الاتصال</div>
+                            <div class="switch-description">استخدم التطبيق بدون اتصال بالإنترنت</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="offlineMode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div id="connectionStatus" class="connection-status">
+                        <svg class="online-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l6 6 6-6"/></svg>
+                        <svg class="offline-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16l6-6 6 6"/></svg>
+                        <span id="connectionStatusText">جاري التحقق...</span>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab-list">
+                            <button class="tab-trigger active" data-tab="backup">نسخ احتياطي</button>
+                            <button class="tab-trigger" data-tab="restore">استعادة</button>
+                        </div>
+                        
+                        <div id="backupTab" class="tab-content active" data-tab="backup">
+                            <p class="tab-description">قم بعمل نسخة احتياطية من جميع ملاحظاتك</p>
+                            
+                            <button id="localBackupButton" class="button secondary full-width">
+                                <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+                                حفظ نسخة احتياطية محلية
+                            </button>
+                            
+                            <div class="separator"></div>
+                            
+                            <button id="cloudBackupButton" class="button primary full-width">
+                                <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 16.7c1.5-1 2-2.5 2-4.2 0-3.3-2.7-6-6-6h-.5C14.6 3.4 12 1 9 1a7 7 0 0 0-7 7 6 6 0 0 0 .1 1H2a4 4 0 0 0-1 7.9A3 3 0 0 0 3.5 18h2"></path><path d="M10 17v4"></path><path d="M14 17v4"></path><path d="M8 21h8"></path></svg>
+                                حفظ نسخة احتياطية سحابية
+                            </button>
+                        </div>
+                        
+                        <div id="restoreTab" class="tab-content" data-tab="restore">
+                            <p class="tab-description">استعادة ملاحظاتك من نسخة احتياطية سابقة</p>
+                            
+                            <div class="import-backup">
+                                <button id="importBackupButton" class="button secondary full-width">
+                                    <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"></path><path d="M17 9l-5 5-5-5"></path><path d="M12 12V3"></path></svg>
+                                    استيراد نسخة احتياطية
+                                </button>
+                                <input type="file" id="importBackupInput" accept=".json" hidden>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dialog-footer">
+                    <button id="closeDialogButton" class="button outline">إغلاق</button>
+                </div>
+            </div>
         </div>
-      </header>
 
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Home Page -->
-        <div id="homePage" class="page active">
-          <div class="search-container">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-            <input type="text" id="searchInput" class="search-input" placeholder="بحث في المذكرات..." />
-          </div>
-
-          <div id="notesList" class="notes-grid"></div>
-          
-          <div id="emptyNotesMessage" class="empty-notes-message">
-            <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 12v6"></path><path d="M15 15H9"></path></svg>
-            <h3 class="empty-title">لا توجد ملاحظات</h3>
-            <p class="empty-text">ابدأ بإضافة ملاحظتك الأولى لتظهر هنا.</p>
-            <button id="emptyAddButton" class="button primary">إضافة ملاحظة جديدة</button>
-          </div>
+        <!-- Delete Confirmation Dialog -->
+        <div id="deleteDialog" class="dialog">
+            <div class="dialog-overlay"></div>
+            <div class="dialog-content">
+                <div class="dialog-header">
+                    <h2 class="dialog-title">تأكيد الحذف</h2>
+                    <p class="dialog-description">هل أنت متأكد من رغبتك في حذف هذه الملاحظة؟ لا يمكن التراجع عن هذا الإجراء.</p>
+                </div>
+                
+                <div class="dialog-footer">
+                    <button id="cancelDeleteButton" class="button outline">إلغاء</button>
+                    <button id="confirmDeleteButton" class="button danger">حذف</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Create/Edit Note Page -->
-        <div id="editPage" class="page">
-          <form id="noteForm" class="note-form">
-            <div class="form-group">
-              <label for="noteTitle" class="form-label">العنوان</label>
-              <input type="text" id="noteTitle" class="form-input" placeholder="عنوان الملاحظة" required />
-            </div>
-            
-            <div class="form-group">
-              <label for="noteContent" class="form-label">المحتوى</label>
-              <textarea id="noteContent" class="form-textarea" placeholder="اكتب ملاحظتك هنا..."></textarea>
-            </div>
-            
-            <div class="form-actions">
-              <button type="button" id="cancelButton" class="button outline">إلغاء</button>
-              <button type="submit" id="saveButton" class="button primary">حفظ</button>
-            </div>
-          </form>
-        </div>
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
 
-        <!-- View Note Page -->
-        <div id="viewPage" class="page">
-          <div class="view-note-header">
-            <div class="view-note-actions">
-              <button id="editNoteButton" class="icon-button rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
-              </button>
-              <button id="shareNoteButton" class="icon-button rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-              </button>
-            </div>
-            <button id="deleteNoteButton" class="icon-button rounded danger">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-            </button>
-          </div>
-          
-          <div class="note-dates">
-            <span id="createdDate" class="date-text"></span>
-            <span id="updatedDate" class="date-text"></span>
-          </div>
-          
-          <div id="noteContentView" class="note-content-view"></div>
-        </div>
-      </main>
-
-      <!-- Backup Dialog -->
-      <div id="backupDialog" class="dialog">
-        <div class="dialog-overlay"></div>
-        <div class="dialog-content">
-          <div class="dialog-header">
-            <h3 class="dialog-title">النسخ الاحتياطي للملاحظات</h3>
-            <p class="dialog-description">قم بعمل نسخة احتياطية من ملاحظاتك أو استعادتها من نسخة سابقة</p>
-          </div>
-          
-          <div class="dialog-body">
-            <div class="offline-mode-switch">
-              <div>
-                <label for="offlineMode" class="switch-label">وضع عدم الاتصال</label>
-                <p class="switch-description">تفعيل هذا الخيار يمنع التطبيق من الاتصال بالإنترنت</p>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="offlineMode">
-                <span class="slider"></span>
-              </label>
-            </div>
-            
-            <div id="connectionStatus" class="connection-status offline">
-              <svg class="online-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 12a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z"></path><path d="M7.23 10.26A6 6 0 0 1 17 7"></path><path d="M2 13.5C2 5.5 12 5.5 12 13.5"></path><path d="M21.41 18.41a2 2 0 0 0-2.82-2.82L13 21"></path><path d="M12 22a10 10 0 0 0 10-10"></path></svg>
-              <svg class="offline-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.13 12.85a11.09 11.09 0 0 1 0-1.7"></path><path d="M6.13 17.85a11.09 11.09 0 0 1-5-5"></path><path d="M6.13 6.15a11.09 11.09 0 0 1 5-5"></path><path d="M11.13 1.15a11.09 11.09 0 0 1 1.7 0"></path><path d="M16.13 6.15a11.09 11.09 0 0 1 5 5"></path><path d="M16.13 17.85a11.09 11.09 0 0 1-5 5"></path><path d="M11.13 22.85a11.09 11.09 0 0 1-1.7 0"></path><path d="M7.63 7.65a4 4 0 0 1 8.8 8.8"></path><path d="m2 2 20 20"></path></svg>
-              <span id="connectionStatusText">غير متصل بالإنترنت</span>
-            </div>
-            
-            <div class="tabs">
-              <div class="tab-list">
-                <button class="tab-trigger active" data-tab="local">نسخة محلية</button>
-                <button class="tab-trigger" data-tab="cloud">نسخة سحابية</button>
-              </div>
-              <div class="tab-content active" data-tab="local">
-                <p class="tab-description">النسخة المحلية تحفظ الملاحظات على جهازك ولا تحتاج اتصال بالإنترنت</p>
-                <button id="localBackupButton" class="button primary full-width">
-                  <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                  إنشاء نسخة احتياطية محلية
-                </button>
-              </div>
-              <div class="tab-content" data-tab="cloud">
-                <p class="tab-description">النسخة السحابية تحفظ الملاحظات في السحابة الإلكترونية وتحتاج اتصال بالإنترنت</p>
-                <button id="cloudBackupButton" class="button primary full-width" disabled>
-                  <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m16 16-4-4-4 4"></path></svg>
-                  إنشاء نسخة احتياطية سحابية
-                </button>
-              </div>
-            </div>
-            
-            <div class="separator"></div>
-            
-            <div class="import-backup">
-              <input type="file" id="importBackupInput" accept=".json" class="hidden" />
-              <button id="importBackupButton" class="button outline full-width">
-                <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                استيراد نسخة احتياطية
-              </button>
-            </div>
-          </div>
-          
-          <div class="dialog-footer">
-            <button id="closeDialogButton" class="button secondary">إغلاق</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Delete Confirmation Dialog -->
-      <div id="deleteDialog" class="dialog">
-        <div class="dialog-overlay"></div>
-        <div class="dialog-content">
-          <div class="dialog-header">
-            <h3 class="dialog-title">هل أنت متأكد؟</h3>
-            <p class="dialog-description">سيتم حذف الملاحظة بشكل نهائي ولن تتمكن من استعادتها.</p>
-          </div>
-          
-          <div class="dialog-footer">
-            <button id="cancelDeleteButton" class="button secondary">إلغاء</button>
-            <button id="confirmDeleteButton" class="button danger">حذف</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Toast Notifications -->
-      <div id="toastContainer" class="toast-container"></div>
-
-      <!-- Footer -->
-      <footer class="footer">
-        <p class="copyright">© <span id="currentYear"></span> تطبيق المذكرات | تطوير م/مهيب الجمالي</p>
-      </footer>
+        <footer class="footer">
+            <p class="copyright">
+                جميع الحقوق محفوظة &copy; <span id="currentYear">2023</span>
+            </p>
+        </footer>
     </div>
-    
+
     <script src="scripts.js"></script>
-  </body>
+</body>
 </html>
